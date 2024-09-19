@@ -108,7 +108,7 @@ export default defineComponent({
         return await this.getAD.cb(this, adInfo);
       },
       getAD: {
-        url: 'http:' === window.location.protocol ? 'http://alpha.openad.network/www/delivery/asyncspc.php' : 'https://alpha.openad.network/www/delivery/asyncspc.php',
+        url: 'https://alpha.openad.network/www/delivery/asyncspc.php',
         cb: function(_this, adInfo){
           _this.userInfo = _this.getUserInfo();
           return this.ajax(_this, adInfo);
