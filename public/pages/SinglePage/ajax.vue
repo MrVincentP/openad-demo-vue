@@ -135,7 +135,7 @@ export default defineComponent({
             let l = _this.getURLParam({}, _this.log.url);
             let c = _this.getURLParam({}, _this.click.url);
             img = { ...img, ...l, ...c };
-            _this.click.link[adInfo.zones] = img.dest;
+            _this.click.link[adInfo.zones] = _this.click.url.substring(_this.click.url.indexOf('dest=')+5);
             delete img.dest;
             _this.img = img;
             _this.log.url = _this.log.url.substring(0, _this.log.url.indexOf('?'));
