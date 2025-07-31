@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>This page is a demo for native mode to load OpenAd ad!</title>
+    <meta name="author" content="OpenAD Protocol">
+    <meta name="keywords" content="ad, ads, advertising, openad, openad protocol, openad network" />
+    <meta name="description" content="A revolution on behalf of the Web3 Advertising Ecosystem." />
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta http-equiv="Cache-Control" content="no-transform"/>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="format-detection" content="telephone=no">
+    <meta name="layoutmode" content="standard">
+    <meta name="wap-font-scale" content="no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+    <meta name="screen-orientation" content="portrait">
+    <meta name="x5-orientation" content="portrait">
+    <meta name="renderer" content="webkit|ie-comp">
+    <link rel="icon" href="https://openad.network/static/favicon.ico">
+    <link href="https://openad.network/static/css/common.css?t=v2" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" name="telegramJS" src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script type="text/javascript" version="2.0" src="https://alpha.openad.network/www/delivery/async.v2.php"></script>
+    <!--this style you should modify by yourself-->
+    <style type="text/css">
+        .openAdNative { height:100%; width:100%; }
+    </style>
+</head>
+<body>
+<div id="app">
+    <!--openAD codes below-->
+    <div class="openAdNative MFlex"></div>
+    <!--openAD codes above-->
+</div>
+<!--openAD script below-->
+<script type="text/javascript">
+    window.addEventListener('DOMContentLoaded',  function() {
+        /** define openAdNative variables **/
+        window.openAdNative = {
+            adInfo: {
+                zoneId: '12', // variable
+                reviveId: '6fced4eee9927b57847cf8dce447ceac', // variable
+            },
+            img: {
+                'width': '',
+                'height': '',
+                'src': '',
+                'bannerid': '',
+                'campaignid': '',
+                'zoneid': '',
+                'loc': '',
+                'referer': '',
+                'cb': '',
+                'sig': '',
+            },
+            /** request img object by use SDK function **/
+            getAD: async function(){
+                let res = await window.openADSDK.init(window.openAdNative.adInfo);
+                console.log('res', JSON.stringify(res));
+                if(res.code === 0) {
+                    let d = window.openAdNative.img = res.data;
+                    let dom = document.querySelector('.openAdNative.MFlex');
+                    dom.innerHTML = `<a href="javascript:void(0);" onclick="window.openAdNative.cb()"><img src="${d.src}" width="${d.width}" height="${d.height}" style="max-width: 100%;max-height: 100%;object-fit: contain;"></a>`;
+                }
+                /**
+                 * code: 0, data: {  } // img object and values
+                 * code: -1, msg: 'load extend js error!'
+                 * code: -2, msg: 'get openAD ads error!'
+                 * code: -3, msg: 'No openAD Ads available yet!'
+                 **/
+            },
+            /** openAD ad img click function **/
+            cb: function (){
+                let img = window.openAdNative.img, params = { bannerid: img.bannerid, zoneid: img.zoneid, sig: img.sig };
+                window.openADSDK.click.cb(params, window.Telegram.WebApp);
+            },
+            /** close openAD ad **/
+            destroy: function(){
+                document.querySelector('.openAdNative.MFlex').innerHTML = '';
+            }
+        };
+
+        /** get openAD ad info **/
+        window.openAdNative.getAD();
+
+        /** if you have more than 1 ad by your zoneId, and you want to refresh openAD ad, you should use the codes below **/
+        setTimeout(function(){
+            window.openAdNative.getAD();
+        }, 200000);
+    });
+</script>
+<!--openAD script above-->
+</body>
+</html>
